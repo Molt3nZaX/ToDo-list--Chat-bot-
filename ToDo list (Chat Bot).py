@@ -1,15 +1,28 @@
+import random
+
 HELP = '''
 help - напечатать справку по программе.
 add - добавить задачу в список (название задачи запрашиваем у пользователя)
 show - напечатать все добавленные задачи
 exit - завершить ввод задач
+random - случайная задача на сегодня
 '''
 
 
 tasks = {}
-today, tomorrow, other = [], [], []
+# today, tomorrow, other = [], [], []
 
-run = True
+
+random_tasks = ['"Погулять"', '"Велопрогулка"', '"Почитать любимую книгу"', '"Го на скалодром"']
+run = True  # триггер для цикла while
+
+def add_todo(date, task):
+    if date in tasks:  # Если дата есть в словаре, то добавляем задачу в список
+        tasks[date].append(task)
+    else:  # Если даты нет в словаре, то создаем запись с ключом date
+        tasks[date] = []
+        tasks[date].append(task)
+    print(f'Задача: {task} добавлена на дату: {date}')
 
 
 print('Приветствую! Я - бот, который поможет Вам спланировать повседневные задачи. Чтобы ознакомиться со списком комманд - введите "help"')
@@ -26,26 +39,16 @@ while run:
                 print('- ', task)
         else:
             print('Такой даты нет')
-        # print(tasks, )
-        # print('Сегодня: ', today, sep='\n')
-        # print('Завтра: ', tomorrow, sep='\n')
-        # print('В другие дни: ', other, sep='\n')
+
     elif command == 'add':
         task = input('Введите название задачи: ')
-        date = input('Когда вы хотите выполнить данную задачу? (Сегодня/Завтра/Не знаю): ')
-        if date in tasks:
-            tasks[date].append(task)
-        else:
-            tasks[date] = []
-            tasks[date].append(task)
-            print(f'Задача {task} добавлена на дату {date}')
-        if date == 'Сегодня':
-            today.append(task)
-        elif date == 'Завтра':
-            tomorrow.append(task)
-        else:
-            other.append(task)
-        # print(f'Задача {task} добавлена!')
+        date = input('Введите дату выполнения задачи: ')
+        add_todo(date, task)
+
+    elif command == 'random':
+        task = random.choice(random_tasks)
+        add_todo('Сегодня', task)
+
     elif command == 'exit':
         print('Спасибо за использование! До свидания!')
         break
